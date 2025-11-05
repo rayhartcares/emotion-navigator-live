@@ -1,0 +1,497 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #e0f7fa; /* Light cyan background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling for longer content */
+    transition: background-color 0.5s ease; /* Smooth background transition */
+}
+
+.app-container {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* Hide overflow during stage transitions */
+}
+
+.stage {
+    display: none;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.stage.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #00796b; /* Dark teal */
+    margin-bottom: 20px;
+}
+
+p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.teacher-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 4px solid #4db6ac; /* Medium teal border */
+}
+
+.intro-text {
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* Buttons */
+.main-btn, .secondary-btn, .emotion-btn, .action-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px 8px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.main-btn {
+    background-color: #26a69a; /* Teal */
+    color: white;
+}
+
+.main-btn:hover {
+    background-color: #00897b; /* Darker teal */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-btn {
+    background-color: #bdbdbd; /* Light grey */
+    color: #333;
+}
+
+.secondary-btn:hover {
+    background-color: #9e9e9e; /* Darker grey */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.emotions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.emotion-btn {
+    background-color: #e0f2f7; /* Light blue-grey */
+    color: #333;
+    padding: 20px 10px;
+    font-size: 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border: 2px solid #b2ebf2;
+}
+
+.emotion-btn:hover {
+    background-color: #b2ebf2; /* Medium blue-grey */
+    transform: scale(1.05);
+    border-color: #00bcd4; /* Brighter blue */
+}
+
+.emotion-btn.selected {
+    background-color: #4dd0e1; /* Even brighter blue */
+    border-color: #00bcd4;
+    transform: scale(1.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- STYLES FOR STAGE 3 CHECKBOXES AND TEXTAREAS --- */
+/* Large emotion emoji style in Stage 3 */
+.large-emotion-emoji-style {
+    font-size: 3em; /* Make it large */
+    display: block;
+    margin-bottom: 10px;
+}
+
+.question-section {
+    background-color: #f8fcfd; /* Very light blue background for sections */
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border: 1px solid #e0f7fa; /* Subtle border */
+    text-align: left;
+}
+
+.choices-grid {
+    /* FIXED: Force 2 columns on wider screens */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns */
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #333;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: left; /* Align text within label */
+    display: flex; /* Use flexbox for icon and text alignment */
+    align-items: center; /* Vertically center icon and text */
+    min-height: 22px; /* Ensure enough height for checkbox */
+
+    /* Styles to keep text on a single line */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;    /* Hide overflowed text */
+    text-overflow: ellipsis; /* Add "..." for overflowed text */
+    padding-right: 10px; /* Give some space for ellipsis */
+}
+.checkbox-container .checkbox-icon { /* The emoji icon itself within the label */
+    font-size: 1.2em; /* Slightly larger emoji */
+    margin-right: 8px; /* Space between icon and text */
+    display: inline-block; /* Ensure it respects margins */
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0; /* Align with the top of the label's content */
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: #eee;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* On mouse-over, add a light-blue background color */
+.checkbox-container:hover input ~ .checkmark {
+    background-color: #cfe9ed;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: #4dd0e1; /* Teal */
+    border-color: #00bcd4;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark */
+.checkbox-container .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.other-textarea {
+    width: calc(100% - 20px);
+    padding: 15px;
+    margin-top: 10px; /* Reduced margin */
+    border: 2px solid #b2ebf2; /* Light blue border */
+    border-radius: 10px;
+    font-size: 1.1em;
+    color: #333;
+    resize: vertical;
+    min-height: 60px; /* Slightly smaller default height */
+    font-family: 'Open Sans', sans-serif;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    display: none; /* Hidden by default */
+}
+
+.other-textarea:focus {
+    outline: none;
+    border-color: #00bcd4; /* Brighter blue on focus */
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+/* --- NEW FLASH MESSAGE STYLES --- */
+.flash-message {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 10px; /* Space above */
+    margin-bottom: 10px; /* Space below */
+    padding: 8px 15px;
+    border-radius: 20px; /* More rounded */
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.4s ease-out; /* Smooth fade */
+    display: none; /* Hidden by default, changed by JS */
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+    width: fit-content; /* Fit content */
+    max-width: 90%; /* Max width */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+}
+
+.why-message {
+    color: white;
+    background-color: #673ab7; /* Deep Purple */
+}
+
+.what-do-message {
+    color: white;
+    background-color: #4caf50; /* Green */
+}
+
+
+/* --- Dynamic Emotion-based Background Colors for the entire body --- */
+body.emotion-active-happy-bg { background-color: #fffde7; } /* Pale yellow */
+body.emotion-active-sad-bg { background-color: #e3f2fd; } /* Light blue */
+body.emotion-active-angry-bg { background-color: #ffebee; } /* Very light red */
+body.emotion-active-scared-bg { background-color: #f3e5f5; } /* Light purple */
+body.emotion-active-excited-bg { background-color: #fff8e1; } /* Lighter yellow */
+body.emotion-active-calm-bg { background-color: #e8f5e9; } /* Pale green */
+body.emotion-active-frustrated-bg { background-color: #fff3e0; } /* Pale orange */
+body.emotion-active-shy-bg { background-color: #fce4ec; } /* Pale pink */
+body.emotion-active-confused-bg { background-color: #ede7f6; } /* Pale lavender */
+body.emotion-active-proud-bg { background-color: #f1f8e9; } /* Pale green-yellow */
+body.emotion-active-lonely-bg { background-color: #e1f5fe; } /* Lighter blue */
+body.emotion-active-disappointed-bg { background-color: #fbe9e7; } /* Lighter peach */
+
+/* Specific background color for the .app-container when an emotion stage is active */
+.stage#why-do-stage.active { background-color: #ffffff; }
+.stage#coping-stage.active { background-color: #ffffff; }
+.stage#final-action-stage.active { background-color: #ffffff; }
+
+
+.coping-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.coping-option-card {
+    background-color: #e8f5e9; /* Light green */
+    border: 1px solid #c8e6c9;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 5px;
+    width: calc(50% - 20px); /* Two columns on larger screens */
+    box-sizing: border-box;
+    text-align: left;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.coping-option-card h3 {
+    color: #2e7d32; /* Dark green */
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.coping-option-card p {
+    font-size: 0.9em;
+    color: #4caf50; /* Medium green */
+}
+
+.coping-option-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.final-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.action-btn {
+    background-color: #ffe0b2; /* Light orange */
+    color: #e65100; /* Dark orange */
+    padding: 20px 10px;
+    font-size: 1.3em;
+    border: 2px solid #ffcc80;
+}
+
+.action-btn:hover {
+    background-color: #ffcc80; /* Medium orange */
+    transform: scale(1.05);
+    border-color: #ff9800; /* Brighter orange */
+}
+
+/* Feedback Message Style */
+.feedback-message {
+    font-style: italic;
+    color: #00796b; /* Matching the main teal color */
+    margin-top: 15px;
+    font-size: 0.95em;
+    min-height: 20px; /* Give it some space even when empty */
+    display: none; /* Hidden by default, shown by JS */
+}
+
+/* --- CUSTOM MODAL STYLES --- */
+.modal-overlay {
+    position: fixed; /* Fixed to viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark overlay */
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 1000; /* On top of everything */
+    opacity: 0; /* Hidden by default */
+    pointer-events: none; /* Not clickable when hidden */
+    transition: opacity 0.3s ease-in-out; /* Smooth fade transition */
+}
+
+.modal-overlay.active {
+    opacity: 1; /* Visible when active */
+    pointer-events: auto; /* Clickable when active */
+}
+
+.modal-content {
+    background-color: #ffffff; /* White background for modal box */
+    padding: 35px;
+    border-radius: 18px; /* Rounded corners */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35); /* Stronger shadow for depth */
+    max-width: 90%;
+    width: 550px; /* Max width for content */
+    text-align: center;
+    transform: scale(0.8); /* Start slightly smaller for pop-in effect */
+    transition: transform 0.3s ease-out; /* Smooth pop-in animation */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1); /* Pop to normal size when active */
+}
+
+.modal-title {
+    font-family: 'Fredoka One', cursive;
+    color: #26a69a; /* Teal */
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.modal-message {
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.modal-close-btn {
+    /* Inherits main-btn styles, adjust if needed */
+    padding: 12px 30px;
+    font-size: 1.15em;
+    margin-top: 15px;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduce overall body padding on small screens */
+    }
+    .app-container {
+        padding: 20px;
+    }
+    .emotions-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 10px;
+    }
+    .emotion-btn {
+        font-size: 1.2em;
+        padding: 15px 5px;
+    }
+    .coping-option-card {
+        width: calc(100% - 10px); /* Single column on small screens */
+    }
+    .choices-grid {
+        /* FIXED: Force single column on small screens */
+        grid-template-columns: 1fr;
+    }
+    .checkbox-container {
+        padding-left: 30px; /* Adjust padding for smaller screens */
+    }
+    .checkmark {
+        height: 20px;
+        width: 20px;
+    }
+    .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 4px;
+        height: 9px;
+    }
+    .modal-content {
+        padding: 25px; /* Adjust padding for smaller screens */
+        width: 95%; /* Make modal content a bit wider on very small screens */
+    }
+    .modal-title {
+        font-size: 1.5em;
+    }
+    .modal-message {
+        font-size: 1em;
+    }
+}
